@@ -1,10 +1,12 @@
-name: r2dpass Android Build
+name: R2dPass Android Build
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -14,20 +16,22 @@ jobs:
   build:
     name: Build r2dpass
     runs-on: ubuntu-24.04
+
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Set up Java 17
+      - name: Setup Java 21
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
-      - name: Set up Node 20
+      - name: Setup Node.js 20
         uses: actions/setup-node@v5
         with:
           node-version: '20'
+          cache: npm
 
       - name: Install JavaScript dependencies
         run: npm install --no-audit --no-fund
@@ -38,10 +42,25 @@ jobs:
 
       - name: Verify toolchain
         run: |
+          echo "=== Node ==="
           node --version
+
+          echo "=== NPM ==="
           npm --version
+
+          echo "=== Java ==="
           java -version
+
+          echo "=== Gradle ==="
           ./android/gradlew --version
+
+      - name: Run JavaScript tests
+        run: npm test -- --runInBand
+        continue-on-error: true
+
+      - name: Clean Android build
+        working-directory: android
+        run: ./gradlew clean
 
       - name: Build debug APK
         working-directory: android
@@ -52,7 +71,9 @@ jobs:
         run: ./gradlew assembleRelease --stacktrace
 
       - name: List APKs
-        run: find android/app/build/outputs/apk -type f -name '*.apk' -print
+        run: |
+          echo "=== APK files ==="
+          find android/app/build/outputs/apk -type f -name "*.apk" -print
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
