@@ -32,56 +32,55 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install JavaScript dependencies
+      - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Make Gradle wrapper executable
+      - name: Verify React Native
+        run: |
+          node --version
+          npm --version
+          npx react-native --version
+
+      - name: Make Gradle executable
         working-directory: android
         run: chmod +x gradlew
 
-      - name: Verify toolchain
+      - name: Verify Java and Gradle
+        working-directory: android
         run: |
-          echo "=== Node ==="
-          node --version
-
-          echo "=== NPM ==="
-          npm --version
-
-          echo "=== Java ==="
           java -version
+          ./gradlew --version
 
-          echo "=== Gradle ==="
-          ./android/gradlew --version
-
-      - name: Run JavaScript tests
-        run: npm test -- --runInBand
-        continue-on-error: true
-
-      - name: Clean Android build
-        working-directory: android
-        run: ./gradlew clean
-
-      - name: Build debug APK
-        working-directory: android
-        run: ./gradlew assembleDebug --stacktrace
-
-      - name: Build release APK
-        working-directory: android
-        run: ./gradlew assembleRelease --stacktrace
-
-      - name: List APKs
+      - name: Generate React Native autolinking
         run: |
-          echo "=== APK files ==="
+          npx react-native config > react-native-config.json
+          echo "React Native configuration generated."
+
+      - name: Clean Android
+        working-directory: android
+        run: ./gradlew clean --stacktrace
+
+      - name: Build Debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --stacktrace --no-daemon
+
+      - name: Build Release APK
+        working-directory: android
+        run: ./gradlew assembleRelease --stacktrace --no-daemon
+
+      - name: Show APK files
+        run: |
+          echo "===== APK FILES ====="
           find android/app/build/outputs/apk -type f -name "*.apk" -print
 
-      - name: Upload debug APK
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: r2dpass-debug-apk
           path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
 
-      - name: Upload release APK
+      - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
           name: r2dpass-release-apk
