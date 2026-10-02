@@ -1,0 +1,28 @@
+{
+  "name": "r2dpass",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "start": "react-native start",
+    "lint": "eslint .",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "19.0.0",
+    "react-native": "0.79.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/runtime": "^7.26.0",
+    "@react-native/babel-preset": "0.79.2",
+    "@react-native/eslint-config": "0.79.2",
+    "@react-native/metro-config": "0.79.2",
+    "@react-native/typescript-config": "0.79.2",
+    "eslint": "^8.57.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.5.3"
+  },
+  "engines": { "node": ">=18" }
+}
