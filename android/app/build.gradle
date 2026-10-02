@@ -1,25 +1,48 @@
-plugins { id 'com.android.application'; id 'com.facebook.react' }
+plugins {
+    id 'com.android.application'
+    id 'com.facebook.react'
+}
 
-react { autolinkLibrariesWithApp() }
+react {
+    autolinkLibrariesWithApp()
+}
 
 android {
     namespace 'com.r2dpass'
+
     compileSdk 35
+
     defaultConfig {
         applicationId 'com.r2dpass'
         minSdk 24
         targetSdk 35
+
         versionCode 1
         versionName '1.0.0'
     }
+
     signingConfigs {
-        debug { storeFile file('debug.keystore'); storePassword 'android'; keyAlias 'androiddebugkey'; keyPassword 'android' }
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
     }
+
     buildTypes {
-        debug { signingConfig signingConfigs.debug }
-        release { minifyEnabled false; shrinkResources false; signingConfig signingConfigs.debug }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
     }
 }
 
-dependencies { implementation('com.facebook.react:react-android') }
-
+dependencies {
+    implementation('com.facebook.react:react-android')
+}
