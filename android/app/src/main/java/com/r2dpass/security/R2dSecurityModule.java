@@ -92,7 +92,7 @@ public class R2dSecurityModule extends ReactContextBaseJavaModule {
 
     private String unwrap(String blob) throws Exception {
         if (blob == null || blob.trim().isEmpty()) throw new SecurityException("Vault storage is empty");
-        String[] p = blob.split("\.", 2);
+        String[] p = blob.split("\\.", 2);
         if (p.length != 2) throw new SecurityException("Invalid vault storage");
         byte[] iv = dec(p[0]);
         if (iv.length != 12) throw new SecurityException("Invalid vault IV");
