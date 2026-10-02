@@ -1,12 +1,12 @@
 <resources>
-    <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:fontFamily">sans</item>
         <item name="android:colorAccent">#E50914</item>
         <item name="android:navigationBarColor">#08090B</item>
         <item name="android:statusBarColor">#08090B</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
-    <style name="SplashTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/launch_screen</item>
         <item name="android:colorAccent">#E50914</item>
         <item name="android:navigationBarColor">#08090B</item>
@@ -14,3 +14,4 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>
+ 
