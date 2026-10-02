@@ -72,16 +72,13 @@ export default function App() {
     } catch { Alert.alert(t(lang,'Access denied','تم رفض الدخول'), t(lang,'Incorrect master password.','كلمة السر الرئيسية غير صحيحة.')); }
   };
 
-  const generate = () => {
-    let chars = '';
-    if (upper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (lower) chars += 'abcdefghijklmnopqrstuvwxyz';
-    if (numbers) chars += '0123456789';
-    if (symbols) chars += '!@#$%^&*()-_=+[]{}?';
-    if (!chars) return Alert.alert(t(lang,'Error','خطأ'), t(lang,'Select at least one character type.','حدد نوعًا واحدًا على الأقل من الأحرف.'));
-    let out = '';
-    for (let i=0;i<length;i++) out += chars[Math.floor(Math.random()*chars.length)];
-    setGenerated(out); setPassword(out);
+  const generate = async () => {
+    try {
+      const out = await R2dSecurity.randomPassword(length, upper, lower, numbers, symbols);
+      setGenerated(out); setPassword(out);
+    } catch {
+      Alert.alert(t(lang,'Error','خطأ'), t(lang,'Select at least one character type.','حدد نوعًا واحدًا على الأقل من الأحرف.'));
+    }
   };
 
   const addApp = async () => {

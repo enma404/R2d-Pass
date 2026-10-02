@@ -63,6 +63,22 @@ public class R2dSecurityModule extends ReactContextBaseJavaModule {
 
     @ReactMethod public void hasVault(Promise promise) { promise.resolve(prefs.contains(DATA)); }
 
+    @ReactMethod public void randomPassword(int length, boolean upper, boolean lower, boolean numbers, boolean symbols, Promise promise) {
+        try {
+            if (length < 4 || length > 128) throw new IllegalArgumentException("Invalid password length");
+            StringBuilder pool = new StringBuilder();
+            if (upper) pool.append("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            if (lower) pool.append("abcdefghijklmnopqrstuvwxyz");
+            if (numbers) pool.append("0123456789");
+            if (symbols) pool.append("!@#$%^&*()-_=+[]{}?");
+            if (pool.length() == 0) throw new IllegalArgumentException("Select at least one character set");
+            SecureRandom random = new SecureRandom();
+            StringBuilder out = new StringBuilder(length);
+            for (int i = 0; i < length; i++) out.append(pool.charAt(random.nextInt(pool.length())));
+            promise.resolve(out.toString());
+        } catch (Exception e) { promise.reject("PASSWORD_GENERATION_ERROR", e.getMessage(), e); }
+    }
+
     @ReactMethod public void createVault(String password, String payload, Promise promise) {
         try {
             if (password == null || password.length() < 8) { promise.reject("WEAK_PASSWORD", "Master password is too short"); return; }

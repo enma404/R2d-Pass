@@ -1,40 +1,32 @@
 # r2dpass
 
-A clean Android password manager built with **React Native + Java**.
+A local-first Android password manager built with React Native 0.79.2 and native Java security code.
 
-## Included
-- Admin account / Master Password creation and unlock.
-- Local encrypted vault.
-- AES-256-GCM encryption.
+## Features
+- Master-password protected local vault.
+- Android Keystore wrapping key.
 - PBKDF2-HMAC-SHA256 with 600,000 iterations.
-- Android Keystore wrapping key for the stored vault blob.
-- App entries: Instagram, Facebook, TikTok, Telegram, Discord, Steam, WhatsApp, LinkedIn, GitHub and Other.
-- Email-only entries.
-- Password generator: uppercase, lowercase, numbers, symbols and 8–32 character slider.
-- Search, show/hide passwords and clean cards.
-- Light/Dark mode.
-- English/Arabic UI with dynamic RTL-aware layouts.
-- Instagram support link.
-- Supplied r2dpass logo used for the Android icon and splash screen.
+- AES-256-GCM encrypted vault data.
+- Cryptographically secure native password generator.
+- App-password and email entries.
+- English and Arabic RTL interface.
+- Light and dark themes.
+- Bundled r2dpass icon and splash screen.
+- No cloud sync and no network permission required by the app.
 
-## Build locally
+## Build
 
-Requirements: Node 20, Java 17, Android SDK and Gradle 8.11.1.
+Requirements: Node 20, JDK 17, Android SDK 35.
 
 ```bash
 npm install
 cd android
-gradle wrapper --gradle-version 8.11.1
 ./gradlew assembleDebug
 ```
 
-APK:
-`android/app/build/outputs/apk/debug/app-debug.apk`
+The debug APK is generated at `android/app/build/outputs/apk/debug/app-debug.apk`.
 
-## GitHub Actions
-
-Push the project to GitHub. The included workflow installs Node 20 and Java 17, creates the Gradle wrapper, builds the debug APK and uploads it as an Actions artifact.
+The repository includes a self-contained Gradle wrapper bootstrap that downloads Gradle 8.13 when required.
 
 ## Security note
-
-The master password is never stored. The vault is encrypted with AES-256-GCM using a key derived from the master password. The encrypted vault blob is additionally wrapped by an Android Keystore AES key before being placed in SharedPreferences.
+The master password is never stored. Vault contents are encrypted with AES-GCM, while the local encrypted vault blob is additionally wrapped with an Android Keystore AES key. This is a local password manager, not a cloud synchronization service.
