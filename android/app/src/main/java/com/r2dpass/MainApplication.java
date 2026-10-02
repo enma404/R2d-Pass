@@ -60,11 +60,18 @@ public class MainApplication extends Application implements ReactApplication {
     public void onCreate() {
         super.onCreate();
 
-        // Only change: use React Native's merged native-library mapping.
-        SoLoader.init(this, OpenSourceMergedSoMapping);
+        // React Native 0.79 merges libreact_featureflagsjni (and most other RN
+        // native libs) into libreactnative.so. SoLoader must be initialised with
+        // OpenSourceMergedSoMapping so these libs are resolved from the merged
+        // library. From Java the Kotlin object must be referenced via INSTANCE.
+        try {
+            SoLoader.init(this, OpenSourceMergedSoMapping.INSTANCE);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
             DefaultNewArchitectureEntryPoint.load();
         }
     }
-                }
+}
