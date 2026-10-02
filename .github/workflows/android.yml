@@ -32,16 +32,16 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install JavaScript dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Verify React Native
+      - name: Verify Node and React Native
         run: |
           node --version
           npm --version
           npx react-native --version
 
-      - name: Make Gradle executable
+      - name: Make Gradle wrapper executable
         working-directory: android
         run: chmod +x gradlew
 
@@ -51,14 +51,9 @@ jobs:
           java -version
           ./gradlew --version
 
-      - name: Generate React Native autolinking
-        run: |
-          npx react-native config > react-native-config.json
-          echo "React Native configuration generated."
-
-      - name: Clean Android
+      - name: Clean Android build
         working-directory: android
-        run: ./gradlew clean --stacktrace
+        run: ./gradlew clean --stacktrace --no-daemon
 
       - name: Build Debug APK
         working-directory: android
@@ -68,9 +63,9 @@ jobs:
         working-directory: android
         run: ./gradlew assembleRelease --stacktrace --no-daemon
 
-      - name: Show APK files
+      - name: Verify APK output
         run: |
-          echo "===== APK FILES ====="
+          echo "===== GENERATED APK FILES ====="
           find android/app/build/outputs/apk -type f -name "*.apk" -print
 
       - name: Upload Debug APK
